@@ -1,0 +1,65 @@
+# CONFIGURATION FILE
+
+# Algorithm
+algorithm: "grpo"
+
+# Model settings
+model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+local_model_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B"
+max_seq_length: 4096           # Can increase for longer reasoning traces
+lora_rank: 32                  # Larger rank = smarter, but slower
+load_in_4bit: True             # False for LoRA 16bit
+load_in_8bit: False
+fast_inference: False          # Enable vLLM fast inference
+gpu_memory_utilization: 0.8    # Reduce if out of memory
+
+# Data settings
+data_path: "data/mimic4/discharge.csv"  # Path to your medical reports (file or directory)
+n_rows: 100  # number of rows to read if the data is in a csv file.
+
+# System prompt for the LLM
+system_prompt: "You are a medical assistant specializing in clinical data processing. 
+  Your task is to generate a detailed structured report from unstructured medical notes of a patient. 
+  Make sure to include the following headings in the structured report -
+  1. Patient Details
+  2. Chief Complaint
+  3. Major Surgical or Invasive Procedure
+  4. History of Present Illness
+  5. Past Medical History
+  6. Social History 
+  7. Physical Examination
+  8. Discharge
+  9. Pertinent Results
+  10. Brief Hospital Course
+  11. Medications on Admission
+  12. Discharge Medications 
+  13. Discharge Disposition
+  14. Discharge Diagnosis
+  15. Discharge Condition
+  16. Discharge Instructions
+  17. Followup Instructions"
+
+# Training settings
+random_state: 3407
+target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]    # Remove QKVO if out of memory
+learning_rate: 5e-6
+adam_beta1: 0.9
+adam_beta2: 0.99
+weight_decay: 0.1
+warmup_ratio: 0.1
+lr_scheduler_type: "cosine"
+optim: "paged_adamw_8bit"
+logging_steps: 1
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 1  # Increase to 4 for smoother training
+num_generations: 2  # Decrease if out of memory
+max_prompt_length: 1024
+num_train_epochs: 1  # Set to 1 for a full training run
+max_steps: 250
+save_steps: 250
+max_grad_norm: 0.1
+output_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-GRPO-Finetuned"
+
+# Checkpoint settings
+checkpoint_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-GRPO-Finetuned"  # Directory to save model checkpoints
+

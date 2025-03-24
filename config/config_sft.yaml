@@ -1,0 +1,47 @@
+# CONFIGURATION FILE
+
+# Algorithm
+algorithm: "sft"
+
+# Model settings
+model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
+local_model_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B"
+max_seq_length: 4096           # Can increase for longer reasoning traces
+lora_rank: 32                  # Larger rank = smarter, but slower
+load_in_4bit: True             # False for LoRA 16bit
+load_in_8bit: False
+fast_inference: False          # Enable vLLM fast inference
+gpu_memory_utilization: 0.8    # Reduce if out of memory
+
+# Data settings
+dataset_name: "FreedomIntelligence/medical-o1-reasoning-SFT"   # Huggingface dataset name for SFT
+data_path: "data/medical_sft_dataset"  # Path to your medical reports (file or directory)
+
+# System prompt for the LLM
+system_prompt: "You are a medical expert with advanced knowledge in clinical reasoning, diagnostics, and treatment planning. Please answer the following medical question."
+include_think_tag: True  # For SFT. If True, the prompt will include think tags.
+
+# Training settings
+random_state: 3407
+target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]    # Remove QKVO if out of memory
+learning_rate: 5e-6
+adam_beta1: 0.9
+adam_beta2: 0.99
+weight_decay: 0.1
+warmup_ratio: 0.1
+lr_scheduler_type: "cosine"
+optim: "paged_adamw_8bit"
+logging_steps: 1
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 1  # Increase to 4 for smoother training
+num_generations: 2  # Decrease if out of memory
+max_prompt_length: 1024
+num_train_epochs: 1  # Set to 1 for a full training run
+max_steps: 250
+save_steps: 250
+max_grad_norm: 0.1
+output_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-SFT"
+
+# Checkpoint settings
+checkpoint_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-SFT"  # Directory to save model checkpoints
+
