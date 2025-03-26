@@ -2,6 +2,8 @@ import torch.nn.functional as F
 from trl import GRPOConfig, GRPOTrainer
 from unsloth import FastLanguageModel
 from src.models.reward import structured_report_reward
+import os
+import json
 
 class GRPO:
     def __init__(self, config: dict, model, tokenizer, data):
@@ -21,8 +23,8 @@ class GRPO:
             lora_alpha=self.config.get("lora_rank", 32),
             use_gradient_checkpointing="unsloth",  # Enable long context finetuning
             random_state=self.config.get("random_state", 100),
+            max_seq_length=max_seq_length,
         )
-
         
         training_args = GRPOConfig(
             learning_rate=float(self.config.get("learning_rate", 5e-6)),
@@ -46,6 +48,11 @@ class GRPO:
             output_dir=self.config.get("output_dir", None),
         )
 
+        # print("Setting the tokenizer pad token..............")
+        # self.tokenizer.pad_token = self.tokenizer.eos_token
+        # self.tokenizer.padding_side = "left"
+        # model.config.pad_token_id = self.tokenizer.pad_token_id
+
         trainer = GRPOTrainer(
             model=model,
             processing_class=self.tokenizer,
@@ -55,3 +62,6 @@ class GRPO:
         )
 
         trainer.train()
+
+        return trainer.state.log_history
+            

@@ -45,3 +45,7 @@ output_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-SFT"
 # Checkpoint settings
 checkpoint_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-SFT"  # Directory to save model checkpoints
 
+# Logs settings:
+logs_dir: "logs"
+logs_file_name: "DeepSeek-R1-Distill-Llama-8B-SFT-Training-Logs.json"
+

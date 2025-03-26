@@ -42,10 +42,13 @@ def load_model(config: dict):
                 model_name=local_model_dir if local_model_dir and os.path.exists(local_model_dir) else model_checkpoint,
                 max_seq_length=max_seq_length,
                 load_in_4bit=True,
+                dtype=None,
                 fast_inference=fast_inference,
                 max_lora_rank=lora_rank,
                 gpu_memory_utilization=gpu_memory_utilization,
+                # device_map="auto"
             )
+            # tokenizer.padding_side='left'
         elif load_in_8bit:
             model, tokenizer = FastLanguageModel.from_pretrained(
                 model_name=local_model_dir if local_model_dir and os.path.exists(local_model_dir) else model_checkpoint,
@@ -54,6 +57,7 @@ def load_model(config: dict):
                 fast_inference=fast_inference,
                 max_lora_rank=lora_rank,
                 gpu_memory_utilization=gpu_memory_utilization,
+                # device_map="auto"
             )
         else:
             model, tokenizer = FastLanguageModel.from_pretrained(
@@ -64,6 +68,7 @@ def load_model(config: dict):
                 fast_inference=fast_inference,
                 max_lora_rank=lora_rank,
                 gpu_memory_utilization=gpu_memory_utilization,
+                # device_map="auto"
             )
         
         if local_model_dir and not os.path.exists(local_model_dir):
@@ -73,6 +78,10 @@ def load_model(config: dict):
             tokenizer.save_pretrained(local_model_dir)
 
         # tokenizer.padding_side = "left"
+        # print("Tokenizer eos_token: ", tokenizer.eos_token)
+        # tokenizer.pad_token = tokenizer.eos_token
+        # tokenizer.padding_side = "left"
+        # print("Model pad_token_id: ", model.config.padding_side)
         return model, tokenizer
     except Exception as e:
         logger.exception(f"Error loading model: {e}")

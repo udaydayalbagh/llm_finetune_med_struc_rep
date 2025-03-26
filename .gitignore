@@ -12,6 +12,7 @@ medical_sft_dataset/
 medical_reports/
 llms/
 outputs/
+logs/
 
 
 # Ignore Python bytecode files
