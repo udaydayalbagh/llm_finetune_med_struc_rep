@@ -4,8 +4,8 @@
 algorithm: "sft"
 
 # Model settings
-model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
-local_model_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B"
+model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+local_model_dir: "llms/DeepSeek-R1-Distill-Llama-8B"
 max_seq_length: 4096           # Can increase for longer reasoning traces
 lora_rank: 32                  # Larger rank = smarter, but slower
 load_in_4bit: True             # False for LoRA 16bit
@@ -40,10 +40,10 @@ num_train_epochs: 1  # Set to 1 for a full training run
 max_steps: 250
 save_steps: 250
 max_grad_norm: 0.1
-output_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-SFT"
+output_dir: "llms/DeepSeek-R1-Distill-Llama-8B-SFT"
 
 # Checkpoint settings
-checkpoint_dir: "llms/DeepSeek-R1-Distill-Qwen-1.5B-SFT"  # Directory to save model checkpoints
+checkpoint_dir: "llms/DeepSeek-R1-Distill-Llama-8B-SFT"  # Directory to save model checkpoints
 
 # Logs settings:
 logs_dir: "logs"

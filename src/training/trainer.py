@@ -69,10 +69,10 @@ class Trainer:
             trainer = SFT(self.config, self.model, self.tokenizer, self.data)
             model, tokenizer, trainer_stats = trainer.train()
             output_dir = self.config.get("output_dir", None)
-            if output_dir:
-                model.save_pretrained(output_dir)
-                tokenizer.save_pretrained(output_dir)
-                # model.save_pretrained_merged(output_dir, tokenizer, save_method = "merged_16bit",)
+            # if output_dir:
+            #     model.save_pretrained(output_dir)
+            #     tokenizer.save_pretrained(output_dir)
+            #     # model.save_pretrained_merged(output_dir, tokenizer, save_method = "merged_16bit",)
             if log_file:
                 with open(log_file, "w") as f:
                     json.dump(trainer_stats, f, indent=4)

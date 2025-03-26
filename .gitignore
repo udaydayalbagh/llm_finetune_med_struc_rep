@@ -13,6 +13,7 @@ medical_reports/
 llms/
 outputs/
 logs/
+config/
 
 
 # Ignore Python bytecode files
@@ -26,6 +27,7 @@ unsloth_compiled_cache/
 # Ignore logs and temporary files
 *.log
 *.tmp
+*.yaml
 
 # Ignore environment-specific files
 .DS_Store  # macOS
