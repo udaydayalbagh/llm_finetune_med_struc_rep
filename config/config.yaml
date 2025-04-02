@@ -5,8 +5,8 @@ algorithm: "grpo"
 
 # Model settings
 model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
-local_model_dir: "llms/DeepSeek-R1-Distill-Llama-8B"
-max_seq_length: 4600           # Can increase for longer reasoning traces
+local_model_dir: ""
+max_seq_length: 6000           # Can increase for longer reasoning traces
 lora_rank: 32                  # Larger rank = smarter, but slower
 load_in_4bit: True             # False for LoRA 16bit
 load_in_8bit: False
@@ -19,8 +19,8 @@ n_rows: 250  # number of rows to read if the data is in a csv file.
 
 # System prompt for the LLM
 system_prompt: "You are a medical assistant specializing in clinical data processing. 
-  Your task is to summarize a medical report in a particular format while making sure that all the details are present in the summary. 
-  Make sure to include the following headings in the structured report -
+  Your task is to summarize a medical report in the given format while making sure that all the details are present in the summary. 
+  Include the following headings in the report -
   1. Patient Details
   2. Chief Complaint
   3. Major Surgical or Invasive Procedure
@@ -37,7 +37,8 @@ system_prompt: "You are a medical assistant specializing in clinical data proces
   14. Discharge Diagnosis
   15. Discharge Condition
   16. Discharge Instructions
-  17. Followup Instructions"
+  17. Followup Instructions
+  Do not add any extra heading. Add all the details related to these headings under the corresponding heading as bullet points."
 
 
 # system_prompt: "You are a medical assistant specializing in clinical data processing. 
@@ -75,11 +76,11 @@ optim: "paged_adamw_8bit"
 logging_steps: 1
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 1  # Increase to 4 for smoother training
-num_generations: 2  # Decrease if out of memory
-max_prompt_length: 2400
-num_train_epochs: 1  # Set to 1 for a full training run
+num_generations: 4  # Decrease if out of memory
+max_prompt_length: 2500
+num_train_epochs: 5  # Set to 1 for a full training run
 max_steps: 250
-save_steps: 50
+save_steps: 250
 max_grad_norm: 0.1
 output_dir: "llms/DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned"
 

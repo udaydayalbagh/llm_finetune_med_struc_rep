@@ -73,6 +73,7 @@ def structured_report_reward(prompts, completions):
             # Total reward calculation
             # total_reward = heading_reward + heading_penalty + repetition_penalty
             total_reward = heading_reward + length_reward
+            total_reward = 0 if total_reward < 0 else total_reward
             rewards.append(total_reward)
         except Exception as e:
             logger.exception(f"Error computing reward for output: {e}")

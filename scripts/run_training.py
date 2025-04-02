@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '/home/udevulap/llm_finetune_med_struc_rep/llm_finetune_med_struc_rep')
 import argparse
 import yaml
 from src.training.trainer import Trainer
