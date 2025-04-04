@@ -32,7 +32,7 @@ def structured_report_reward(prompts, completions):
                 output_text = output_text[1].strip()
 
             length_reward = 0
-            if len(output_text.strip()) > 200:
+            if len(output_text.strip()) > 500:
                 length_reward += 0.2
 
             # Extract headings using regex (assuming headings are followed by a newline)
@@ -51,23 +51,23 @@ def structured_report_reward(prompts, completions):
                 previous_headings = []
                 for found_heading in found_headings:
                     if required_heading in found_heading and found_heading not in previous_headings:
-                        heading_reward += 0.2
+                        heading_reward += 1
                         exists = True
                     if found_heading in previous_headings:
-                        heading_reward -= 0.05
+                        heading_reward -= 0.5
                     previous_headings.append(found_heading)
                 if not exists:
                     extra_headings += 1
             missing_headings = len(required_headings) - (found_headings_len - extra_headings)
 
-            heading_penalty = -0.01 * (extra_headings + missing_headings)
+            heading_penalty = -0.2 * (extra_headings + missing_headings)
             
             # Check for phrase repetition using n-grams
             words = re.findall(r'\b\w+\b', output_text.lower())  # Tokenize words
             n_gram_size = 4  # Define n-gram size
             n_grams = [tuple(words[i:i + n_gram_size]) for i in range(len(words) - n_gram_size + 1)]
             n_gram_counts = Counter(n_grams)
-            repetition_penalty = 0.01 * -sum(count - 1 for count in n_gram_counts.values() if count > 1)
+            repetition_penalty = 0.05 * -sum(count - 1 for count in n_gram_counts.values() if count > 1)
             # print(f"repetition_penalty : {repetition_penalty} .........................")
             
             # Total reward calculation
