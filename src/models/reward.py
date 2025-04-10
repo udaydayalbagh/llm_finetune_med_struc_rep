@@ -10,8 +10,7 @@ def remove_think(text:str):
 
 # Extract all the headings. Improve the headings reward. Give reward for number of headings. Max reward for 20 headings. Lesser reward for less or more headings.
 # Also check that under each heading there are bullet points, not a paragraph. 
-# Reduce reward for repetitive sentences.
-# ASK CHATGPT!
+# Negative reward for repetitive sentences.
 
 def structured_report_reward(prompts, completions):
     required_headings = {

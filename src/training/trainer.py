@@ -20,8 +20,7 @@ class Trainer:
         Initialize the Trainer with configuration parameters.
         
         Parameters:
-            config (dict): Configuration parameters including model_checkpoint, data_path,
-                           learning_rate, num_epochs, max_length, and checkpoint_dir.
+            config (dict): Configuration parameters.
         """
         self.config = config
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -67,12 +66,7 @@ class Trainer:
         
         elif self.algorithm == 'sft':
             trainer = SFT(self.config, self.model, self.tokenizer, self.data)
-            model, tokenizer, trainer_stats = trainer.train()
-            output_dir = self.config.get("output_dir", None)
-            # if output_dir:
-            #     model.save_pretrained(output_dir)
-            #     tokenizer.save_pretrained(output_dir)
-            #     # model.save_pretrained_merged(output_dir, tokenizer, save_method = "merged_16bit",)
+            trainer_stats = trainer.train()
             if log_file:
                 with open(log_file, "w") as f:
                     json.dump(trainer_stats, f, indent=4)
