@@ -104,7 +104,7 @@ def load_sft_data(config: dict, EOS_token):
         dataset = load_from_disk(dataset_path)
         dataset = dataset.map(preprocessor.format_sft_prompts, batched = True,)
     else:
-        dataset = load_dataset(dataset_name,"en", split = "train[0:20000]", trust_remote_code=True)
+        dataset = load_dataset(dataset_name,"en", split = "train", trust_remote_code=True)
         dataset = dataset.map(preprocessor.format_sft_prompts, batched = True,)
         if dataset_path:
             logger.info(f"Saving dataset to local directory: {dataset_path}")

@@ -4,14 +4,14 @@
 algorithm: "grpo"
 
 # Model settings
-model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
 local_model_dir: ""
 max_seq_length: 6000           # Can increase for longer reasoning traces
 lora_rank: 32                  # Larger rank = smarter, but slower
 load_in_4bit: True             # False for LoRA 16bit
 load_in_8bit: False
 fast_inference: False          # Enable vLLM fast inference
-gpu_memory_utilization: 0.8    # Reduce if out of memory
+gpu_memory_utilization: 0.9    # Reduce if out of memory
 
 # Data settings
 data_path: "data/mimic4/discharge.csv"  # Path to your medical reports (file or directory)
@@ -19,7 +19,7 @@ n_rows: 500  # number of rows to read if the data is in a csv file.
 
 # System prompt for the LLM
 system_prompt: "You are a medical assistant specializing in clinical data processing. 
-  Your task is to summarize a medical report in the given format while making sure that all the details are present in the summary. 
+  Your task is to organize a medical report in the given format while making sure that all the details are present in the organized report. 
   Include the following headings in the report -
   1. Patient Details
   2. Chief Complaint
@@ -65,7 +65,6 @@ system_prompt: "You are a medical assistant specializing in clinical data proces
 # Training settings
 random_state: 3407
 target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]    # Remove QKVO if out of memory
-# target_modules: ["gate_proj", "up_proj", "down_proj"]    # Remove QKVO if out of memory
 learning_rate: 5e-6
 adam_beta1: 0.9
 adam_beta2: 0.99
@@ -77,17 +76,17 @@ logging_steps: 1
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 2  # Increase to 4 for smoother training
 num_generations: 4  # Decrease if out of memory
-max_prompt_length: 2500
+max_prompt_length: 3000
 num_train_epochs: 6  # Set to 1 for a full training run
 max_steps: 3000
 save_steps: 1000
 max_grad_norm: 0.1
-output_dir: "llms/DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned"
+output_dir: "llms/DeepSeek-R1-Distill-Qwen-14B-GRPO-Finetuned"
 
 # Checkpoint settings
-checkpoint_dir: "llms/DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned"  # Directory to save model checkpoints
+checkpoint_dir: "llms/DeepSeek-R1-Distill-Qwen-14B-GRPO-Finetuned"  # Directory to save model checkpoints
 
 # Logs settings:
 logs_dir: "logs"
-logs_file_name: "DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned-Training-Logs.json"
+logs_file_name: "DeepSeek-R1-Distill-Qwen-14B-GRPO-Finetuned-Training-Logs.json"
 

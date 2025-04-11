@@ -71,6 +71,6 @@ class Preprocessor:
     def format_rl_prompts(self, data):
         texts = []
         for report in data:
-            text = {'prompt': self.rl_prompt_style.format(self.instruction, report) + self.EOS_Token}
+            text = {'prompt': self.rl_prompt_style.format(self.instruction, report)}
             texts.append(text)
         return texts

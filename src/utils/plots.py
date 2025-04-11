@@ -30,7 +30,7 @@ def plot_rewards(data: list, plot_path: str, window_size=10):
     plt.savefig(plot_path)
     # plt.show()
     
-with open('logs/DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned-Training-Logs.json') as f:
+with open('logs/DeepSeek-R1-Distill-Qwen-14B-GRPO-Finetuned-Training-Logs.json') as f:
     d = json.load(f)
     plot_data = []
     for data in d:
