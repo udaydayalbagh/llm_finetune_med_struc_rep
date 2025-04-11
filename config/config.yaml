@@ -15,7 +15,7 @@ gpu_memory_utilization: 0.8    # Reduce if out of memory
 
 # Data settings
 data_path: "data/mimic4/discharge.csv"  # Path to your medical reports (file or directory)
-n_rows: 250  # number of rows to read if the data is in a csv file.
+n_rows: 500  # number of rows to read if the data is in a csv file.
 
 # System prompt for the LLM
 system_prompt: "You are a medical assistant specializing in clinical data processing. 
@@ -75,12 +75,12 @@ lr_scheduler_type: "cosine"
 optim: "paged_adamw_8bit"
 logging_steps: 1
 per_device_train_batch_size: 2
-gradient_accumulation_steps: 1  # Increase to 4 for smoother training
+gradient_accumulation_steps: 2  # Increase to 4 for smoother training
 num_generations: 4  # Decrease if out of memory
 max_prompt_length: 2500
-num_train_epochs: 5  # Set to 1 for a full training run
-max_steps: 250
-save_steps: 250
+num_train_epochs: 6  # Set to 1 for a full training run
+max_steps: 3000
+save_steps: 1000
 max_grad_norm: 0.1
 output_dir: "llms/DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned"
 
