@@ -2,6 +2,7 @@ import torch.nn.functional as F
 from trl import GRPOConfig, GRPOTrainer
 from unsloth import FastLanguageModel
 from src.models.reward import structured_report_reward
+from peft import PeftModel, LoraConfig
 import os
 import json
 
@@ -15,16 +16,39 @@ class GRPO:
     def train(self):
         max_seq_length = self.config.get("max_seq_length", 1024)
         max_prompt_length = self.config.get("max_prompt_length", 256)
-
-        model = FastLanguageModel.get_peft_model(
-            self.model,
-            r=self.config.get("lora_rank", 32),  # Choose any number > 0! Suggested 8, 16, 32, 64, 128
-            target_modules=self.config.get("target_modules", ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]),
-            lora_alpha=self.config.get("lora_rank", 32),
-            use_gradient_checkpointing="unsloth",  # Enable long context finetuning
-            random_state=self.config.get("random_state", 100),
-            max_seq_length=max_seq_length,
-        )
+        add_new_lora_adapter = self.config.get("add_new_lora_adapter", True)
+        
+        if add_new_lora_adapter:
+            if isinstance(self.model, PeftModel):
+                model = self.model
+                adapter_name = self.config.get("existing_adapter_name", "default")
+                new_adapter_config = LoraConfig(
+                    r=self.config.get("lora_rank", 32),
+                    target_modules=self.config.get("target_modules", ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]),
+                    lora_alpha=self.config.get("lora_rank", 32),
+                )
+                model.add_adapter("grpo_adapter", new_adapter_config)
+                model.add_adapter_fusion([adapter_name, "grpo_adapter"])
+                model.set_adapter_fusion([adapter_name, "grpo_adapter"])
+                for name, param in model.named_parameters():
+                    if "grpo_adapter" in name:
+                        param.requires_grad = True
+                    else:
+                        param.requires_grad = False
+            else:
+                model = FastLanguageModel.get_peft_model(
+                    self.model,
+                    r=self.config.get("lora_rank", 32),
+                    target_modules=self.config.get("target_modules", ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]),
+                    lora_alpha=self.config.get("lora_rank", 32),
+                    use_gradient_checkpointing="unsloth",
+                    random_state=self.config.get("random_state", 100),
+                    max_seq_length=max_seq_length,
+                )
+        else:
+            model = self.model
+            adapter_name = self.config.get("existing_adapter_name", "default")
+            model.set_adapter(adapter_name)
         
         training_args = GRPOConfig(
             learning_rate=float(self.config.get("learning_rate", 5e-6)),
@@ -47,11 +71,6 @@ class GRPO:
             report_to="none",  # Can use Weights & Biases
             output_dir=self.config.get("output_dir", None),
         )
-
-        # print("Setting the tokenizer pad token..............")
-        # self.tokenizer.pad_token = self.tokenizer.eos_token
-        # self.tokenizer.padding_side = "left"
-        # model.config.pad_token_id = self.tokenizer.pad_token_id
 
         trainer = GRPOTrainer(
             model=model,

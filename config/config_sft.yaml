@@ -4,7 +4,7 @@
 algorithm: "sft"
 
 # Model settings
-model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
+model_checkpoint: "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
 local_model_dir: ""
 max_seq_length: 6000           # Can increase for longer reasoning traces
 lora_rank: 32                  # Larger rank = smarter, but slower
@@ -23,26 +23,25 @@ include_think_tag: True  # If True, the prompt will include think tags.
 # Training settings
 random_state: 3407
 target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]    # Remove QKVO if out of memory
-learning_rate: 2e-4
+learning_rate: 1e-4
 weight_decay: 0.1
 lr_scheduler_type: "linear"
 optim: "adamw_8bit"
-logging_steps: 1
+logging_steps: 10
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 4  # Increase to 4 for smoother training
 warmup_steps: 5
-num_generations: 4  # Decrease if out of memory
 num_train_epochs: 1  # Set to 1 for a full training run
 max_steps: -1
-save_steps: 250
-save_total_limit: 1
+save_steps: 1000
+save_total_limit: 2
 max_grad_norm: 0.01
-output_dir: "llms/DeepSeek-R1-Distill-Qwen-14B-SFT"
+output_dir: "llms/DeepSeek-R1-Distill-Llama-8B-SFT"
 
 # Checkpoint settings
-checkpoint_dir: "llms/DeepSeek-R1-Distill-Qwen-14B-SFT"
+checkpoint_dir: "llms/DeepSeek-R1-Distill-Llama-8B-SFT"
 
 # Logs settings:
 logs_dir: "logs"
-logs_file_name: "DeepSeek-R1-Distill-Qwen-14B-SFT-Training-Logs.json"
+logs_file_name: "DeepSeek-R1-Distill-Llama-8B-SFT-Training-Logs.json"
 

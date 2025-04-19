@@ -100,7 +100,7 @@ def load_sft_data(config: dict, EOS_token):
     dataset_name = config.get('dataset_name', "FreedomIntelligence/medical-o1-reasoning-SFT")
     dataset_path = config.get("data_path", None)
     preprocessor = Preprocessor(config=config, EOS_Token=EOS_token)
-    if os.path.exists(dataset_path):
+    if dataset_path and os.path.exists(dataset_path):
         dataset = load_from_disk(dataset_path)
         dataset = dataset.map(preprocessor.format_sft_prompts, batched = True,)
     else:
@@ -111,4 +111,19 @@ def load_sft_data(config: dict, EOS_token):
             os.makedirs(dataset_path, exist_ok=True)
             dataset.save_to_disk(dataset_path)
     return dataset
+
+
+def load_rl_test_data(config, EOS_Token):
+    data_path = config.get('data_path', None)
+    if not data_path:
+        raise ValueError("Data path is not specified in the config.")
+    start_index = config.get('start_index', 0)
+    n_rows = config.get('n_rows', 50)
+
+    preprocessor = Preprocessor(config, EOS_Token)
+    df = pl.read_csv(data_path, n_rows=start_index+n_rows)
+    df = df["text"]
+    df = df[start_index:start_index+n_rows]
+    data = preprocessor.format_rl_prompts(df)
+    return data
 

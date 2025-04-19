@@ -43,10 +43,10 @@ class Preprocessor:
             ### Instruction:
             {}
 
-            ### Unstructured Report:
+            ### Medical Report:
             {}
 
-            ### Structured Report:
+            ### Organized Report:
             """
         
         self.EOS_Token = EOS_Token

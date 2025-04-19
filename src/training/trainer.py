@@ -36,11 +36,6 @@ class Trainer:
         else:
             self.data = load_rl_data(self.config, self.tokenizer.eos_token)
 
-        # Create checkpoint directory if it doesn't exist
-        # self.checkpoint_dir = self.config.get('checkpoint_dir', './checkpoints')
-        # os.makedirs(self.checkpoint_dir, exist_ok=True)
-        # logger.info(f"Checkpoint directory set to: {self.checkpoint_dir}")
-
 
     def train(self):
         """

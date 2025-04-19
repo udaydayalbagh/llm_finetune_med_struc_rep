@@ -4,4 +4,4 @@ and evaluate model outputs.
 """
 
 from .trainer import Trainer
-from .evaluator import evaluate_output, evaluate_model
+from .evaluator import Evaluator
