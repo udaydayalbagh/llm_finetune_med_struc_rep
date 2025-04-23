@@ -41,28 +41,6 @@ system_prompt: "You are a medical assistant specializing in clinical data proces
   17. Followup Instructions
   Do not add any extra heading. Add all the details related to these headings under the corresponding heading as bullet points."
 
-
-# system_prompt: "You are a medical assistant specializing in clinical data processing. 
-#   Your task is to generate a detailed structured report from unstructured medical notes of a patient. 
-#   Make sure to include the following headings in the structured report -
-#   1. Patient Details
-#   2. Chief Complaint
-#   3. Major Surgical or Invasive Procedure
-#   4. History of Present Illness
-#   5. Past Medical History
-#   6. Social History 
-#   7. Physical Examination
-#   8. Discharge
-#   9. Pertinent Results
-#   10. Brief Hospital Course
-#   11. Medications on Admission
-#   12. Discharge Medications 
-#   13. Discharge Disposition
-#   14. Discharge Diagnosis
-#   15. Discharge Condition
-#   16. Discharge Instructions
-#   17. Followup Instructions"
-
 # Training settings
 random_state: 3407
 target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]    # Remove QKVO if out of memory

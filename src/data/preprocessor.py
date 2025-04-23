@@ -52,9 +52,6 @@ class Preprocessor:
         self.EOS_Token = EOS_Token
         self.instruction = config.get('system_prompt', '')
 
-        # You are a medical expert with advanced knowledge in clinical reasoning, diagnostics, and treatment planning.
-        # Please answer the following medical question.
-
     def format_sft_prompts(self, examples):
         inputs = examples["Question"]
         cots = examples["Complex_CoT"]

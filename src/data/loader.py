@@ -10,15 +10,6 @@ import polars as pl
 logger = logging.getLogger(__name__)
 
 def load_rl_data(config, EOS_Token):
-    """
-    Load structured medical reports from the given data path.
-
-    Parameters:
-        data_path (str): The path to a data file or directory containing the reports.
-
-    Returns:
-        list: A list of medical report dictionaries.
-    """
     data = []
     preprocessor = Preprocessor(config, EOS_Token)
     data_path = config['data_path']
@@ -31,7 +22,6 @@ def load_rl_data(config, EOS_Token):
         config = yaml.safe_load(f)
     system_prompt = config.get("system_prompt", "")
 
-    # If the data_path is a directory, load all JSON files
     if os.path.isdir(data_path):
         for filename in os.listdir(data_path):
             if filename.endswith('.json'):
@@ -40,7 +30,6 @@ def load_rl_data(config, EOS_Token):
                     with open(file_path, 'r') as f:
                         report = json.load(f)
                         prompt = system_prompt + '\n\n' + str(report)
-                        # Support both list of reports or a single report per file
                         if isinstance(report, list):
                             data.extend({'prompt': prompt})
                         elif isinstance(report, dict):
@@ -57,7 +46,6 @@ def load_rl_data(config, EOS_Token):
                 except:
                     print("ERROR")
 
-    # If the data_path is a file, load based on the file extension
     elif os.path.isfile(data_path):
         ext = os.path.splitext(data_path)[1].lower()
         try:
@@ -78,10 +66,6 @@ def load_rl_data(config, EOS_Token):
                 df = pl.read_csv(data_path, n_rows=n_rows)
                 df = df["text"]
                 data = preprocessor.format_rl_prompts(df)
-            
-            elif ext == '.pdf':
-                # TODO: Implement PDF
-                raise(NotImplementedError)
             else:
                 logger.error(f"Unsupported file format: {ext}")
                 raise ValueError(f"Unsupported file format: {ext}")

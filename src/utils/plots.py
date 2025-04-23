@@ -12,20 +12,23 @@ def plot_rewards(data: list, plot_path: str, window_size=20):
     moving_std = np.array(moving_std)
 
     # Plot data
-    plt.figure(figsize=(10, 5))
-    # plt.plot(data, label="Original Data", alpha=0.5)
-    plt.plot(moving_mean, label="Moving Mean", color='blue', linewidth=2)
+    plt.figure(figsize=(20, 10))
+    plt.plot(data, label="Loss", alpha=0.5)
+    plt.plot(moving_mean, label="Loss Mean", color='blue', linewidth=2)
 
     # Fill the area between (mean ± std deviation)
     plt.fill_between(range(len(data)),
                     moving_mean - moving_std,
                     moving_mean + moving_std,
-                    color='blue', alpha=0.2, label="Standard Deviation")
+                    color='blue', alpha=0.2, label="Loss SD")
 
     # Labels and legend
-    plt.xlabel("Reward")
-    plt.ylabel("Training Steps")
-    plt.title("Reward vs Training Steps (DeepSeek-R1-Distill-Llama-8B)")
+    plt.rcParams.update({'font.size': 20})
+    plt.xlabel("Training Steps", fontsize=28)
+    plt.ylabel("Loss", fontsize=28)
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.title("SFT Training Loss (DeepSeek-R1 8B)", fontsize=32)
     plt.legend()
     plt.savefig(plot_path)
     # plt.show()
@@ -67,27 +70,40 @@ def plot_two_rewards(data1, data2, plot_path, window_size=20):
     plt.ylabel("Reward", fontsize=28)
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
-    plt.title("Comparison of GRPO and SFT + GRPO for DeepSeek-R1 8B", fontsize=32)
+    plt.title("Rewards During Fine-tuning (DeepSeek-R1 8B)", fontsize=32)
     plt.legend()
     plt.savefig(plot_path)
     # plt.show()
-    
-with open('logs/DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned-Training-Logs.json') as f:
-    with open('logs/DeepSeek-R1-Distill-Llama-8B-SFT-GRPO-Finetuned-2-Training-Logs.json') as f2:
-        d = json.load(f)
-        d2 = json.load(f2)
-        plot_data_1 = []
-        plot_data_2 = []
-        i = 0
-        for i in range(500):
-            try:
-                plot_data_1.append(d[i]["reward"])
-                plot_data_2.append(d2[i]["reward"])
-                i += 1
-                if i == 1000:
-                    break
-            except:
-                pass
-        plot_path = "logs/comparison_plot.png"
-        plot_two_rewards(plot_data_1, plot_data_2, plot_path)
+
+
+if __name__ == "__main__":
+    # with open('logs/DeepSeek-R1-Distill-Llama-8B-SFT-Training-Logs.json') as f:
+    #     d = json.load(f)
+    #     plot_data = []
+    #     for data in d:
+    #         try:
+    #             plot_data.append(data["loss"])
+    #         except:
+    #             pass
+    #     plot_path = "logs/DeepSeek-R1-Distill-Llama-8B-SFT-Training_Loss.png"
+    #     plot_rewards(plot_data, plot_path,  window_size=20)
+
+    with open('logs/DeepSeek-R1-Distill-Llama-8B-GRPO-Finetuned-Training-Logs.json') as f:
+        with open('logs/DeepSeek-R1-Distill-Llama-8B-SFT-GRPO-Finetuned-2-Training-Logs.json') as f2:
+            d = json.load(f)
+            d2 = json.load(f2)
+            plot_data_1 = []
+            plot_data_2 = []
+            i = 0
+            for i in range(500):
+                try:
+                    plot_data_1.append(d[i]["reward"])
+                    plot_data_2.append(d2[i]["reward"])
+                    i += 1
+                    if i == 1000:
+                        break
+                except:
+                    pass
+            plot_path = "logs/comparison_plot.png"
+            plot_two_rewards(plot_data_1, plot_data_2, plot_path)
 

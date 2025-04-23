@@ -1,5 +1,5 @@
 """
-The models package provides functionality for loading the deepseek-r1 model,
+The models package provides functionality for loading the models,
 generating outputs, and computing rewards for reinforcement learning.
 """
 

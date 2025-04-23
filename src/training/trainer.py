@@ -11,17 +11,7 @@ import json
 logger = logging.getLogger(__name__)
 
 class Trainer:
-    """
-    Trainer class to handle the reinforcement learning training for fine-tuning the LLM.
-    """
-
     def __init__(self, config: dict):
-        """
-        Initialize the Trainer with configuration parameters.
-        
-        Parameters:
-            config (dict): Configuration parameters.
-        """
         self.config = config
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -38,12 +28,6 @@ class Trainer:
 
 
     def train(self):
-        """
-        Execute the training over the dataset.
-        
-        Returns:
-            The trained model.
-        """
         logs_dir = self.config.get("logs_dir", None)
         logs_file_name = self.config.get("logs_file_name", None)
         log_file = os.path.join(logs_dir, logs_file_name) if logs_dir and logs_file_name else None
@@ -67,13 +51,3 @@ class Trainer:
                     json.dump(trainer_stats, f, indent=4)
         else:
             logger.error(f"Invalid algorithm {self.algorithm}")
-
-        
-if __name__ == "__main__":
-    try:
-        with open("config/config.yaml", "r") as f:
-            config = yaml.safe_load(f)
-        trainer = Trainer(config)
-        trainer.train()
-    except Exception as e:
-        logger.exception(f"Training failed: {e}")

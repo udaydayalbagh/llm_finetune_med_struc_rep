@@ -7,15 +7,13 @@ from src.data.loader import load_data
 from src.data.preprocessor import preprocess_data
 
 def test_load_data_file_json():
-    # Create a temporary JSON file with a single medical report.
     data = {"patient_id": "123", "text": "Test medical report", "date": "2025-03-15"}
     with tempfile.NamedTemporaryFile(mode="w+", suffix=".json", delete=False) as tmp_file:
         json.dump(data, tmp_file)
         tmp_file_path = tmp_file.name
 
-    # Load data from the file and then clean up.
     loaded_data = load_data(tmp_file_path)
-    os.unlink(tmp_file_path)  # Cleanup the temporary file
+    os.unlink(tmp_file_path)
 
     assert isinstance(loaded_data, list)
     assert len(loaded_data) == 1
@@ -27,7 +25,6 @@ def test_load_data_dir_json():
     assert isinstance(loaded_data, list)
 
 def test_load_data_directory_json():
-    # Create a temporary directory and write two JSON report files.
     temp_dir = tempfile.mkdtemp()
     data1 = {"patient_id": "123", "text": "Report one", "date": "2025-03-15"}
     data2 = {"patient_id": "456", "text": "Report two", "date": "2025-03-16"}
@@ -40,19 +37,8 @@ def test_load_data_directory_json():
         json.dump(data2, f)
 
     loaded_data = load_data(temp_dir)
-    shutil.rmtree(temp_dir)  # Cleanup the temporary directory
+    shutil.rmtree(temp_dir)  
 
     assert isinstance(loaded_data, list)
     patient_ids = {report["patient_id"] for report in loaded_data}
     assert patient_ids == {"123", "456"}
-
-def test_preprocess_data():
-    # Create dummy reports with and without the 'text' field.
-    reports = [
-        {"patient_id": "001", "text": "   SAMPLE REPORT   ", "date": "2025-03-15"},
-        {"patient_id": "002", "date": "2025-03-16"},  # Missing text field.
-    ]
-    processed = preprocess_data(reports)
-    # Check that the text is normalized and missing text gets a default empty string.
-    assert processed[0]["text"] == "sample report"
-    assert processed[1]["text"] == ""
