@@ -6,11 +6,11 @@ This package contains modules for:
 - Model loading and inference (src.models)
 - Reinforcement learning training (src.training)
 - Utility functions (src.utils)
-
-Importing submodules here allows you to reference them easily.
+- Algorithms for training (src.algorithms)
 """
 
 from .data import *
 from .models import *
 from .training import *
 from .utils import *
+from .algorithms import *
